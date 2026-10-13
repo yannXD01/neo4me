@@ -14,16 +14,16 @@ def clear_screen():
     os.system('clear')
 
 def banner():
-    # Menggunakan warna hijau matrix terang (\033[1;32m atau \033[92m dengan bold)
+    # Menggunakan cetak warna terpisah agar ANSI escape code terbaca terminal
+    print("\033[1;32m")
     print(r"""
-\033[1;32m
  _  _ ____ ____  _  _  _  _ 
  |\ | |___ |  |  |__|  |  | 
  | \| |___ |__|     |  |__| 
-                            
-\033[0m\033[96m   Neo4script - Silent. Stealth. Secure.\033[0m
 """)
+    print("\033[0m\033[96m   Neo4script - Silent. Stealth. Secure.\033[0m")
     print("--------------------------------------------------")
+
 
 def menu_update():
     print("\n\033[93m[+] Running System Update & Upgrade...\033[0m")
@@ -35,22 +35,22 @@ def menu_whoame():
     try:
         username = subprocess.check_output("whoami", shell=True).decode().strip()
         print(f" * Termux Username : {username}")
-        
+
         response = requests.get("https://ipinfo.io/json", timeout=5)
         data = response.json()
-        
+
         ip = data.get("ip", "Unknown")
         city = data.get("city", "Unknown")
         region = data.get("region", "Unknown")
         country = data.get("country", "Unknown")
         org = data.get("org", "Unknown")
-        
+
         print(f" * Public IP       : {ip}")
         print(f" * Location        : {city}, {region}, {country}")
         print(f" * ISP / Network   : {org}")
     except Exception as e:
         print(f" [-] Failed to get network info: {e}")
-    
+
     input("\nPress Enter to return to the menu...")
 
 def menu_hacking_tools():
@@ -84,5 +84,24 @@ def main():
         print("4. OTP Engine")
         print("5. Exit")
         print("--------------------------------------------------")
-        
-        pilihan = input("Enter
+
+        pilihan = input("Enter choice: ").strip()
+
+        if pilihan == '1':
+            menu_update()
+        elif pilihan == '2':
+            menu_whoame()
+        elif pilihan == '3':
+            menu_hacking_tools()
+        elif pilihan == '4':
+            menu_otp_engine()
+        elif pilihan == '5':
+            print("\nThank you for using Neo4script. Exiting...")
+            sys.exit(0)
+        else:
+            print("\n\033[91m[!] Invalid choice, please try again.\033[0m")
+            time.sleep(1.5)
+
+if __name__ == "__main__":
+    main()
+
